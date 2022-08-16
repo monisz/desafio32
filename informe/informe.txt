@@ -1,0 +1,8 @@
+1) Compression
+    Ruta /info sin compresión: 1.5 kB ~ 1500 bytes
+    Ruta /info con compresión: 1.0 kB ~ 1000 bytes
+
+2) Loggers
+    Mando captura de pantalla de los loggeos en consola ejecutando sin NODE_ENV (queda en modo DEVELOPING)
+
+3) Artillery
