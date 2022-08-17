@@ -145,6 +145,7 @@ app.get('/info', (req, res) => {
         folder: process.cwd(),
         numCPUs: numCPUs
     };
+    console.log(info);
     res.render('info', {info});
 });
 

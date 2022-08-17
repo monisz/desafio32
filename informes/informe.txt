@@ -1,0 +1,40 @@
+1) Compression
+    Ruta /info sin compresión: 1.5 kB ~ 1500 bytes
+    Ruta /info con compresión: 1.0 kB ~ 1000 bytes
+
+2) Loggers
+    Mando captura de pantalla de los loggeos en consola ejecutando sin NODE_ENV (queda en modo DEVELOPING)
+
+3)  Análisis de performance
+  - Con profiler de node.js
+    Primero levanto el servidor con >node --prof server (por defecto está en modo fork y puerto 8080)
+    Lo detengo. Renombro el archivo isolate como info_sin_console.log.
+    Agrego el console.log a la ruta info y levanto igual el servidor
+    Para leer mejor la info de esos archivos, los modificamos con:
+    >node --prof-process info_sin_console.log > result_sin_console.txt y
+    >node --prof-process info_con_console.log > result_con_console.txt
+    No hay demasiada diferencia entre los 2:
+    - sin console.log tiene 1296 llamadas
+    - con console.log tiene 1337 llamadas
+  - Con Artillery
+    Sin console.log
+     Primero levanto el servidor con >node server (por defecto está en modo fork y puerto 8080)
+     Para hacer el test de carga ejecuto:
+     >artillery quick --count 50 -n 20 http://localhost:8080/info > result_artillery_sin_console.txt
+    Con console.log
+     Agrego el console.log al server
+     Levanto el servidor igual y ejecuto:
+     >artillery quick --count 50 -n 20 http://localhost:8080/info > result_artillery_con_console.txt
+    Obviamente tampoco se ve gran diferencia con artillery, 368 request por segundo, 
+    contra 379 del que no tiene console.log.
+  - Con inspector
+   Levantar el servidor con >node --inspect server
+   Corro artillery como antes y genero el Profile en inspect
+   Adjunto capturas de los procesos que emplean más tiempo, y agregué un par,
+   de los que se pueden ver en mi código (porque los otros son procesos internos)
+  - Con Autocannon y 0x
+   Instalo 0x de forma global
+   Ejecuto con npm run start y en otra consola npm run test, primero con el console
+   y luego otra vez lo mismo comentando el console.log.
+   Adjunto capturas de los informes en consola y en informes están las carpetas de 0x,
+   donde está el gráfico, que renombré como con_console.0x y sin_console.0x
